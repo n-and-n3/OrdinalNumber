@@ -1,0 +1,148 @@
+Ordinal Calculator
+Let W be the set of all (formal) ordinal numbers that can be written down with symbols 0, 1, 2, ..., omega(), epsilon(), +, -, *, ^.
+
+There exists an algorithmical formal manipulation which calculates addition, subtraction, multiplication, ordinal power and several other ordinal functions (e.g., cofinality and cardinality) of elements of W in the Cantor normal form. The algorithms can effectively be implemented as a computer program.
+
+The calculation with ordinal numbers is based on the following theorems. For the reason of space, their simple proofs are only outlined.
+
+Arithmetics
+Theorem 1 (Ordinal Addition):
+Let
+
+a = sum{i=1..k} omega^{ai} * ni,
+b = sum{i=1..q} omega^{bi} * mi
+be ordinals in the Cantor normal form. Let r be the index such that ar = b1 (if the term with the exponent b1 is not present in the Cantor normal form of a, it should be added into its proper place with the zero coefficient nr). Then
+sum{i=1..r-1} omega^{ai}*ni + omega^{b1}*(nr+m1) + sum{j=2..q} omega^{bj}*mj
+is the Cantor normal form of a + b.
+Proof:
+Follows from the fact that omega^a + omega^b = omega^b if a < b. QED
+
+Theorem 2 (Ordinal Subtraction):
+Let a < b be ordinals in Cantor normal form as above. Let r be the first index such that omega^{ar}*nr < omega^{br}*mr (this happens if ar < br, or if ar = br and nr < mr; the former case can be transformed into the latter by inserting the zero term omega^{ar}*0 in its proper place in the Cantor normal form of b; similarly the only other possibility that the entire normal form of a is the beginning part of that of b can be handled). Then
+
+omega^{br}*(mr - nr) + sum{j=r+1..q} omega^{bj}*mj
+is the Cantor normal form of a - b.
+Proof:
+With Theorem 1 it can be shown that a + (a - b) = b here. QED
+
+Theorem 3 (Ordinal Multiplication):
+Let
+
+a = sum{i=1..k} omega^{ai}*ni,
+b = sum{j=1..q-1} omega^{bj}*mj + m
+be ordinals in the Cantor normal form. Then the Cantor normal form of a * b is
+sum{j=1..q-1} omega^{a1+bj}*mj + omega^{a1}*n1*m + sum{i=2..k} omega^{ai}*ni
+if m > 0, or
+sum{j=1..q-1} omega^{a1+bj}*mj
+if m = 0.
+Proof:
+The case of m > 0 can be derived from the identity c*omega = omega^{c1+1}, c being a non-zero ordinal normalized as above, which can be proved by constructing an isomorfism between well-ordered sets with types of c*omega and omega^{c1}*omega. The other case of m = 0 can be derived from the identity
+
+(sum{i=1..k} omega^{ci}*ri) * m = omega^{c1}*r1*m + sum{i=2..k} omega^{ci}*ri,
+m being a non-zero natural number. QED
+Theorem 4 (Ordinal Finite Power):
+Let r > 1 be a natural number,
+
+a = sum{i=1..k-1} omega^{ai}*ni + m
+be a non-zero ordinal in the Cantor normal form. Then the Cantor normal form of a^r is
+sum{i=1..k-1} omega^{a1*(r-1)+ai}*ni + sum{j=1..r-1} (omega^{a1}*(r-j)*n1*m + sum{i=2..k-1} omega^{a1*(r-j-1)+ai}*ni)
+if m > 0, or
+sum{i=1..k-1} omega^{a1*(r-1)+ai}*ni
+if m = 0.
+Proof:
+Let c be an infinite ordinal. By induction it can easily be proved that omega^{c1*n} =< c^n < omega^{c1*(n+1)} holds for every natural n. Therefore, c^omega = omega^{c1*omega}. Hence it follows that a^{omega^{d}*m} = omega^{a1*omega^{d}*m}, d any non-zero ordinal, and using this, the case m > 0 can be proved by induction on r. The case of m = 0 is even simpler. QED
+
+Theorem 5 (Ordinal Power):
+Let
+
+a = sum{i=1..k} omega^{ai}*ni,
+b = sum{j=1..q-1} omega^{bi}*mj + m
+be ordinals in the Cantor normal form. Then
+a^b = omega^{a1 * sum{j=1..q-1}omega^{bi}*mj} * a^m
+if a is infinite, or
+a^b = omega^{sum{j=1..q-1}omega^{bi}*mj} * a^m,
+if a is finite. The latter case is the Cantor normal form of a^b, the former can be transformed into it with Theorems 4 and 3.
+Proof:
+The case of a infinite can be derived from the same identity as in Theorem 4, the other case from the identity n^{omega^{d}*m} = omega^{omega^{d-1}*m}, d being a non-zero ordinal, n > 1 natural. QED
+
+Comment
+Cases not covered by Theorems 1-5 (eg. a^0) are trivial.
+
+It can be seen that all the formulae express the Cantor normal form of +, -, *, ^ using these same operators applied on the ordinal numbers which already are present in the Cantor normal form of the operands (and therefore are lesser, unless they be epsilon-numbers). Thus the recursive descent stops at zero or an epsilon after a finite number of steps.
+
+Therefore, with Theorems 1-5, if given a set E of epsilons (with known comparison), we are able to find the Cantor normal form of any expression that contains only the elements of E, natural numbers, the number omega and the four operators +, -, *, ^.
+
+Comparison of Epsilons and Cardinals
+Theorem 6 (Cardinality of An Epsilon):
+Let a be an infinite ordinal. Then Card(epsilon(a)) = Card(a).
+
+Proof:
+Let a be the least ordinal that epsilon(a) >= omega(c+1), c being the cardinality of a. The ordinal a cannot be isolated, since Card(epsilon(a)) = Card(epsilon(a+1)). So because of normality of the epsilon function we get epsilon(a) = omega(c+1). But then {epsilon(b): b<a} is cofinal in omega(c+1), which being an isolated cardinal cannot have a cofinal subset of a lesser cardinality (AC used here). QED
+
+Theorem 7 (Epsilon of A Cardinal):
+Let a be a non-zero ordinal. Then epsilon(omega(a)) = omega(a).
+
+Proof:
+Follows from Theorem 6 and the normality of omega and epsilon functions. QED
+
+Comment
+In consequence of Theorems 6-7, any comparison of the values of the omega and epsilon functions can be reduced to the comparison of their arguments. Expressions containing omega() and epsilon() operators can then be calculated by Theorems 1-5 too. However, the Axiom of Choice is used.
+
+In a computer, the set E of "atomic epsilons" can only be finite. Yet with use of Theorems 6-7, the range of calculation is radically extended: Let E' be a (finite) set of fix points of the omega function (with known comparison); then the Cantor normal form of any expression constructed of elements of E', natural numbers and the operators +, -, *, ^, omega() and epsilon() can algorithmically be found.
+
+Even if E' is empty, the class of the implemented ordinals is much larger then before (being the whole W now). The role of "atomic constants" is now taken by fix points of the omega function.
+
+Cofinality Function
+Theorem 8 (Cofinality of An Arithmetical Operation):
+
+(a) If b > 0, then cf (a + b) = cf (b).
+(b) If b > a, then cf (b - a) = cf (b).
+(c) If b > 0 is isolated, then cf (a * b) = cf (a), else cf (a * b) = cf (b).
+(d1) If b is limit and a > 1, then cf (a^b) = cf (b).
+(d2) If b > 0 is isolated and a is limit, then cf (a^b) = cf (a).
+(d3) If both a and b are isolated, a > 1, b infinite and sum{i=1..k} omega^{ai}*ni is the Cantor normal form of a, then cf (a^b) = cf (ak).
+Proof:
+The cases (a) and (b) are trivial, (c1) follows from (a) and (d2) from (c). As for (c2) and (d1), a cofinal subset of the required type can easily be constructed and it can be shown that any greater cofinality of the result would imply a greater cofinality of the operand (the contradiction). As for (d3), if we suppose b to be the least ordinal such that there exists an ordinal a that the proposition fails, we get a contradiction from the fact that cf (a^b) = cf (a^{b-1}) here. QED
+
+Theorem 9 (Cofinality of Epsilons and Cardinals):
+Let a be a limit and b an isolated ordinal. Then
+
+(a) cf (epsilon (a)) = cf (a),
+(b) cf (omega (a)) = cf (a),
+(c) cf (epsilon (b)) = omega,
+(d) cf (omega (b)) = omega (b).
+Proof:
+Let F be a normal ordinal function; then cf (F(a)) = cf (a) for every limit a. As both epsilon and omega are normal, we get the cases (a) and (b). The case (c) follows from the fact that epsilon (c+1) = sup {epsilon(c)+1, omega^{epsilon(c)+1}, ...} and (d) from the regularity of isolated infinite cardinals (AC). QED
+
+Comment
+Theorems 8-9 allow us to evaluate the cofinality function of any expression made of E'. If calculating in a theory that lacks AC, however, the cofinality of each element of E must be known and added to E.
+
+A Calculator
+Result Reduction
+During the calculation, all temporary results should be formed as strict Cantor form ordinals, exponents of which are also normalized; for example, omega^omega + 2 should be stored as
+omega^{omega^{omega^{0}*1}*1}*1 + omega^{0}*2.
+The output, however, should be more readable to humans. Some reduction rules are therefore necessary. Such rules may be e.g. the following ones:
+Eliminate zero terms.
+Reduce all terms omega^{e}*n where e is an epsilon to e*n.
+Reduce all terms omega^{0}*n to n.
+Reduce all terms omega^{1}*n to omega*n.
+Reduce all terms a*1 to a.
+All this should be done recursively through all levels of exponents of exponents. Other sets of rules, however, are possible - e.g. transforming a sum within an exponent to a product on the output. The look of the result depends strongly on the rules accepted, as can be shown by totally different understanding of the Cantor normal form of (epsilon+1)^2 *omega written down with the former rules as omega^{epsilon*2 + 1} and as epsilon^2 *omega with the latter ones.
+Other Functions
+Some other functions can effectively be implemented. An incomplete list follows here:
+
+Remainder. From Theorem 2 it is obvious what all remainders of an ordinal look like (and how many of them exist). It is easy to get the n-th one of them.
+Operators div, mod. The theorems are probably not difficult to obtain. As Euclid's algorithm works for ordinals, the function gcd could then be programmed too.
+Natural sum and product (Cantor normal forms summed and multiplied as common polynomials).
+Few simple Boolean functions - whether an ordinal is finite, countable, limit etc.
+Cardinality. The theorem is trivial.
+Ordinal Functions. Ordinal expressions with variables can also be formally manipulated, but the rules of ordinal arithmetics do not allow full control of getting the result. By an application of known rules some calculation of limits etc can be done, but often the program will have to give up and say something like "I cannot evaluate the result".
+The Program
+I have made a simple calculator based on Theorems 1-5 (it does not calculate with epsilon and omega functions though, only with a fixed set E of epsilons). As far as I tried, it appears to calculate correctly. The program for DOS (45 KB) and C++ sources are available for download. I hope to make a Java version some day.
+
+An example of the abilities of the module is the sequence of all ordinals up to epsilon0 (with a few gaps, though) generated by a 20-line procedure using its arithmetical module.
+
+Any comments and corrections are welcome. I am grateful to Nick Violi for pointing out two typos in the formulae of Theorem 3.
+
+Libor Behounek, Prague, Faculty of Arts, Department of Logic.
+Created: the program 1995, the webpage Nov-1997.
