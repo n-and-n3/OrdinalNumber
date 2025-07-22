@@ -273,6 +273,8 @@ class OrdinalNumber: #順序数を扱うクラス
                 return OrdinalNumber(1)
             if self.iszore():
                 return OrdinalNumber(0)
+            if self == 1:
+                return OrdinalNumber(1)
             if other.isfinit():
                 # Theorem 4 (Ordinal Finite Power):
                 # Let r > 1 be a natural number,
@@ -285,8 +287,6 @@ class OrdinalNumber: #順序数を扱うクラス
                 r = other.toint()
                 if r < 0:
                     raise ValueError("Cannot raise an ordinal to a negative power.")
-                if self == 1:
-                    return OrdinalNumber(1)
                 if r == 0:
                     return OrdinalNumber(1)
                 if r == 1:
