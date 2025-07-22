@@ -79,7 +79,7 @@ class OrdinalNumber: #順序数を扱うクラス
                 raise ValueError("Cannot subtract a non-negative integer from an infinite ordinal.")
         elif type(other) == OrdinalNumber:
             if self < other:
-                print(self, other)
+                #print(self, other)
                 raise ValueError("Cannot subtract a larger ordinal from a smaller one.")
             if other.iszore():
                 return self
@@ -190,11 +190,12 @@ class OrdinalNumber: #順序数を扱うクラス
                 mod = self - other * floor
                 return (floor, mod)
         p1 = other.exp[0][1]
+        c1 = other.exp[0][0]
         m = None
         if other.exp[-1][1] == 0:
             m = other.exp[-1][0]
         if m is not None:
-            floor = OrdinalNumber([((c,p - p1) if p - p1 != 0 else (c//m,0))  for c, p in self.exp if p >= p1])
+            floor = OrdinalNumber([((c,p - p1) if p - p1 != 0 else (c//c1,0))  for c, p in self.exp if p >= p1])
             mod = self - other * floor
             if not (0 <= mod < other):
                 raise ValueError("The result of division is not in the expected range.")
@@ -284,6 +285,8 @@ class OrdinalNumber: #順序数を扱うクラス
                 r = other.toint()
                 if r < 0:
                     raise ValueError("Cannot raise an ordinal to a negative power.")
+                if self == 1:
+                    return OrdinalNumber(1)
                 if r == 0:
                     return OrdinalNumber(1)
                 if r == 1:
@@ -831,8 +834,13 @@ def main():
 
 def test():
     # 手動テスト
+    omega = OrdinalNumber.omega
     print("手動テスト")
-    print("(OrdinalNumber('omega')+1)*2 :", (OrdinalNumber('omega')+1)*2)
+    #print("(OrdinalNumber('omega')+1)*2 :", (OrdinalNumber('omega')+1)*2)
+    print("(ω^2*7 + ω*3 + 2) // (ω*2 + 1) =",(omega**2*7 + omega*3 + 2)//(omega*2+1))
+    print("(ω^2*7 + ω*3 + 2) % (ω*2 + 1) =",(omega**2*7 + omega*3 + 2)%(omega*2+1))
+    print(" → ",(omega*2+1) * ((omega**2*7 + omega*3 + 2) // (omega*2+1)) + ((omega**2*7 + omega*3 + 2) % (omega*2+1)))
+
 
 if __name__ == "__main__":
-    main()
+    test()
