@@ -827,7 +827,7 @@ def main():
     print("g >= g:", g >= g)
     print("g <= g:", g <= g)
     print("g < g + 1:", g < g + 1)
-    print("g > g - 1:", g == (g - 1))
+    print("g == g - 1:", g == (g - 1))
 
 def test():
     # 手動テスト
