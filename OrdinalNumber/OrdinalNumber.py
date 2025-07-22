@@ -126,9 +126,7 @@ class OrdinalNumber: #順序数を扱うクラス
     def __mul__(self,other):
         if type(other) == int and other >= 0:
             if other > 0:
-                new_exp = self.exp.copy()
-                new_exp[0] = (new_exp[0][0] * other, new_exp[0][1])
-                return OrdinalNumber([(c * other, p) for c, p in self.exp])
+                return self * OrdinalNumber(other)
             if other == 0:
                 return OrdinalNumber(0)
             else:
@@ -830,6 +828,11 @@ def main():
     print("g <= g:", g <= g)
     print("g < g + 1:", g < g + 1)
     print("g > g - 1:", g == (g - 1))
+
+def test():
+    # 手動テスト
+    print("手動テスト")
+    print("(OrdinalNumber('omega')+1)*2 :", (OrdinalNumber('omega')+1)*2)
 
 if __name__ == "__main__":
     main()
