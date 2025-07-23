@@ -196,12 +196,22 @@ class OrdinalNumber: #順序数を扱うクラス
             m = other.exp[-1][0]
         if m is not None:
             floor = OrdinalNumber([((c,p - p1) if p - p1 != 0 else (c//c1,0))  for c, p in self.exp if p >= p1])
+            print(f'({other})*({floor}) = {other * floor}')
+            print(self)
+            if OrdinalNumber([(c,p) for c, p in self.exp if p < p1]) < OrdinalNumber([(c,p) for c, p in other.exp if p < p1]):
+                if floor.exp[-1][1] == 0:
+                    floor.exp[-1][0] = max(0, floor.exp[-1][0] - 1)
             mod = self - other * floor
             if not (0 <= mod < other):
                 raise ValueError("The result of division is not in the expected range.")
             return (floor, mod)
         else:
             floor = OrdinalNumber([(c,p - p1) for c, p in self.exp if p >= p1])
+            print(f'({other})*({floor}) = {other * floor}')
+            print(self)
+            if OrdinalNumber([(c,p) for c, p in self.exp if p < p1]) < OrdinalNumber([(c,p) for c, p in other.exp if p < p1]):
+                if floor.exp[-1][1] == 0:
+                    floor.exp[-1] = (max(0, floor.exp[-1][0] - 1),0)
             mod = self - other * floor
             if not (0 <= mod < other):
                 raise ValueError("The result of division is not in the expected range.")
@@ -836,11 +846,90 @@ def test():
     # 手動テスト
     omega = OrdinalNumber.omega
     print("手動テスト")
-    #print("(OrdinalNumber('omega')+1)*2 :", (OrdinalNumber('omega')+1)*2)
-    print("(ω^2*7 + ω*3 + 2) // (ω*2 + 1) =",(omega**2*7 + omega*3 + 2)//(omega*2+1))
-    print("(ω^2*7 + ω*3 + 2) % (ω*2 + 1) =",(omega**2*7 + omega*3 + 2)%(omega*2+1))
-    print(" → ",(omega*2+1) * ((omega**2*7 + omega*3 + 2) // (omega*2+1)) + ((omega**2*7 + omega*3 + 2) % (omega*2+1)))
+    a = omega**omega * 3 + 1
+    b = omega**omega + 2
+    print("a:", a) 
+    print("b:", b)
+    print("a // b:", a // b)
+    print("a % b:", a % b)
+    print("b * a // b + a % b:", b * (a // b) + (a % b))
 
+def test_():
+    # 手動テスト
+    omega = OrdinalNumber.omega
+    print("手動テスト")
+    a = omega**omega * 4 + omega**10 * 2 + 1
+    b = omega**omega * 2 + omega**12 * 8
+    print("a:", a) 
+    print("b:", b)
+    print("a // b:", a // b)
+    print("a % b:", a % b)
+    print("b * a // b + a % b:", b * (a // b) + (a % b))
 
+def test2():
+    # 順序数ωの除算・剰余演算のテストケース配列
+    array = [
+        # ---- 基本的なケース ----
+        # 被除数が有限数
+        ("20", "3"),
+        # ωを有限数で割る (左除算)
+        ("omega", "10"),
+        # ω+n / ω
+        ("omega + 5", "omega"),
+        # ω*m / ω*k
+        ("omega * 8", "omega * 3"),
+        # ω*m+n / ω*k+l
+        ("omega * 5 + 10", "omega * 2 + 3"),
+
+        # ---- 次数が関わるケース (多項式除算に類似) ----
+        # ω^2 / ω
+        ("omega**2", "omega"),
+        # (ω^2) / (ω+n)
+        ("omega**2", "omega + 5"),
+        # (ω^2+n) / (ω+k)
+        ("omega**2 + 10", "omega + 3"),
+        # 一般的な多項式形式の除算
+        ("omega**2 * 7 + omega * 3 + 2", "omega * 2 + 1"), # ユーザー提供の例
+        ("omega**2 + omega * 5 + 8", "omega + 3"),
+        ("omega**3 * 4 + omega * 2 + 7", "omega**2 * 2 + omega * 3 + 1"),
+        
+        # ---- 係数が1で、項が飛んでいるケース ----
+        ("omega**3 + 2", "omega**2 + omega*5 + 1"),
+        ("omega**5 + omega**2 + 100", "omega**2 + 1"),
+        
+        # ---- 複雑な係数や次数のケース ----
+        ("omega**3 * 2 + omega**2 * 4 + omega * 6 + 8", "omega * 3 + 2"),
+        ("omega**4", "omega**2 * 5 + omega * 8 + 3"),
+
+        # ---- 指数にωが含まれる超限的なケース ----
+        # ω^ω / ω^n
+        ("omega**omega", "omega**100"),
+        # (ω^ω + α) / β
+        ("omega**omega + omega**2 * 5 + 10", "omega**3 + omega*2 + 1"),
+        # (ω^ω * m + ...) / (ω^ω * k + ...)
+        ("omega**omega * 5 + omega**10 * 4", "omega**omega * 2 + omega**12 * 8"),
+        ("omega**omega * 3", "omega**omega + 1"),
+        
+        # ---- さらに複雑な指数のケース ----
+        ("omega**(omega+1)", "omega**omega"),
+        ("omega**(omega*2) + omega**omega * 5", "omega**(omega*2) + omega**omega * 2 + 100"),
+        ("omega**(omega**2)", "omega**omega * 10"),
+    ]
+
+    omega = OrdinalNumber.omega
+    for a,b in array:
+        try:
+            ord_a = eval(a.replace("omega", "OrdinalNumber.omega"))
+            ord_b = eval(b.replace("omega", "OrdinalNumber.omega"))
+            result = ord_a // ord_b
+            mod = ord_a % ord_b
+            print(f"{ord_a} // {ord_b} = {result}, {ord_a} % {ord_b} = {mod}")
+            if ord_a == ord_b * result + mod:
+                print(f"  正しい: {ord_a} = {ord_b} * {result} + {mod}")
+            else:
+                print(f"  誤り: {ord_a} != {ord_b} * {result} + {mod}")
+        except Exception as e:
+            print(f"Error for {a} // {b}: {e}")
 if __name__ == "__main__":
-    test()
+    #test()
+    test_()
